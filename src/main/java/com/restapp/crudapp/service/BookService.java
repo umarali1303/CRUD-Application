@@ -52,4 +52,35 @@ public class BookService {
         }
         return response;
     }
+
+    public void deleteBookById(Long id) {
+        booksRepository.deleteById(id);
+    }
+
+    public BookResponseDTO updateBooks(Long id, BookRequestDTO bookRequestDTO) {
+        var optionalResponse=booksRepository.findById(id);
+        if(optionalResponse.isPresent()){
+            BookEntity existingEntity=optionalResponse.get();
+            existingEntity.setDescription(bookRequestDTO.getDescription());
+            existingEntity.setTitle(bookRequestDTO.getTitle());
+
+            existingEntity=booksRepository.save(existingEntity);
+
+            BookResponseDTO response=new BookResponseDTO();
+            response.setDescription(existingEntity.getDescription());
+            response.setTitle(existingEntity.getTitle());
+            return response;
+        }
+        return null;
+    }
+
+    public BookResponseDTO partialUpdate(Long id, String description) {
+        var existingEntity=booksRepository.getOne(id);
+        existingEntity.setDescription(description);
+        existingEntity=booksRepository.save(existingEntity);
+        BookResponseDTO response=new BookResponseDTO();
+        response.setDescription(existingEntity.getDescription());
+        response.setTitle(existingEntity.getTitle());
+        return response;
+    }
 }

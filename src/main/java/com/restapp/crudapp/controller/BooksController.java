@@ -33,5 +33,23 @@ public class BooksController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteBookById(@PathVariable Long id){
+
+        bookService.deleteBookById(id);
+        return new ResponseEntity("Deleted "+id,HttpStatus.NO_CONTENT);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity updateBooks(@PathVariable Long id,@RequestBody BookRequestDTO bookRequestDTO){
+        var response=bookService.updateBooks(id,bookRequestDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @PatchMapping("/partialUpdate/{id}")
+    public ResponseEntity partialUpdate(@PathVariable(value = "id") Long id,@RequestParam String description){
+        var response=bookService.partialUpdate(id,description);
+        return ResponseEntity.ok(response);
+    }
 
 }
